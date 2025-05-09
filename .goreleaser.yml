@@ -39,7 +39,7 @@ signs:
       - --detach-sign
       - --armor
       - --local-user
-      - AFCDC90DBB1D23BD1C7259A64B30BEEACB143E35
+      - 721A8B3A1DD5F15EABB58C54FBBBFC1F55ACC2E6
       - --output
       - "${signature}"
       - "${artifact}"
