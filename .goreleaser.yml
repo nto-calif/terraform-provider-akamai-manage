@@ -1,0 +1,43 @@
+version: 2
+
+project_name: terraform-provider-akamai-manage
+
+builds:
+  - main: ./main.go
+    binary: terraform-provider-akamai-manage
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+
+archives:
+  - format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - README.md
+
+release:
+  github:
+    owner: nto-calif
+    name: terraform-provider-akamai-manage
+
+signs:
+  - artifacts: checksum
+    args:
+      - --detach-sign
+      - --armor
+      - --output
+      - "${signature}"
+      - "${artifact}"
+
+checksum:
+  name_template: "SHA256SUMS"
+
