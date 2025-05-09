@@ -32,8 +32,14 @@ release:
 signs:
   - artifacts: checksum
     args:
+      - --batch
+      - --yes
+      - --pinentry-mode
+      - loopback
       - --detach-sign
       - --armor
+      - --local-user
+      - ABCD1234EFGH5678
       - --output
       - "${signature}"
       - "${artifact}"
